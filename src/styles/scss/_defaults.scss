@@ -1,0 +1,19 @@
+//default styles for the app
+
+//Global Fonts
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+body {
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.App {
+    font-family: 'Montserrat', sans-serif;
+}
+
+//bootstrap defaults
+.form-group {
+    margin: 15px 0;
+}

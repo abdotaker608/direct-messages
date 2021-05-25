@@ -1,0 +1,7 @@
+$silver: rgb(247, 244, 244);
+
+@mixin media($px) {
+    @media screen and (min-width: $px) {
+        @content;
+    }
+}

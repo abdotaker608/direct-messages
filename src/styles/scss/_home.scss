@@ -1,0 +1,27 @@
+header.home-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    background: $silver;
+    padding: 20px;
+
+    h3 {
+        margin-top: 10px;
+        color: gray;
+    }
+
+    form {
+        margin-top: 10px;
+
+        input {
+            width: 300px;
+        }
+
+        button {
+            min-width: 60px;
+        }
+    }
+}

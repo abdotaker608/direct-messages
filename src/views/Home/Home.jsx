@@ -10,6 +10,9 @@ function Home() {
     //function for connecting to main socket
     const {connectToMainSocket} = useContext(UUIDContext);
 
+    //websocket connecting status
+    const [connecting, setConnecting] = useState(false);
+
     //blurred status for input
     const [blurred, setBlurred] = useState(false);
 
@@ -19,7 +22,8 @@ function Home() {
         //User must enter a name
         if (!name) return;
         //Connect to the main socket
-        connectToMainSocket();
+        setConnecting(true);
+        connectToMainSocket(name);
     }
 
     return (
@@ -32,7 +36,7 @@ function Home() {
                         <Form.Control onBlur={() => setBlurred(true)} onChange={(e) => setName(e.target.value)} isInvalid={blurred && !name} placeholder="Enter your name.." />
                     </Form.Group>
                     <Form.Group>
-                        <Button variant="primary">Join</Button>
+                        <Button type="submit" variant="primary" disabled={connecting}>Join</Button>
                     </Form.Group>
                 </Form>
             </header>

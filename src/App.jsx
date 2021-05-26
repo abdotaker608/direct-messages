@@ -8,11 +8,11 @@ import UUIDProvider from 'providers/UUIDProvider';
 function App() {
   return (
     <div className="App">
-      <UUIDProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <UUIDProvider>
           <Router />
-        </BrowserRouter>
-      </UUIDProvider>
+        </UUIDProvider>
+      </BrowserRouter>
     </div>
   );
 }

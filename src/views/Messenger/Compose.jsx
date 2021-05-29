@@ -3,7 +3,7 @@ import {v4} from 'uuid';
 import EmojiPicker from 'emoji-picker-react';
 import {Input, Box, IconButton} from "@chakra-ui/react";
 import {BiWinkTongue, BiMicrophone, BiUnlink, BiSend} from 'react-icons/bi';
-import Emoji from 'react-emoji-render';
+import {useToast} from '@chakra-ui/react';
 
 function Compose({onSend, uuid}) {
 
@@ -16,13 +16,51 @@ function Compose({onSend, uuid}) {
     //compose input ref used to type message
     const composeInputRef = useRef(null);
 
+    //messages toaster
+    const toast = useToast();
+
     //current message value that is being typed
     const [message, setMessage] = useState('');
+
+    //function for handling media change
+    const handleMedia = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const validTypes = /image|video/;
+        if (file.type.match(validTypes)) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const b64Data = e.target.result.split('base64,')[1];
+                onSend({sender: {uuid}, attachment: b64Data, hash: v4()});
+                //Reset the input
+                fileInputRef.current.value = null;
+            }
+            reader.onerror = () => {
+                toast({
+                    title: "Whoops!",
+                    description: "Failed to read the file data..",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: false
+                })
+            }
+            reader.readAsDataURL(file);
+        }
+        else {
+            toast({
+                title: "Unsupported Media!",
+                description: "Only images and videos can be attached..",
+                status: "error",
+                duration: 3000,
+                isClosable: false
+            })
+        }
+    }
 
     //functioning icons
     const icons = [
         {Icon: BiMicrophone, onClick: null},
-        {Icon: BiUnlink, onClick: null},
+        {Icon: BiUnlink, onClick: () => fileInputRef.current.click()},
         {Icon: BiWinkTongue, onClick: () => setOpenPicker(!openPicker)}
     ]
 
@@ -50,7 +88,7 @@ function Compose({onSend, uuid}) {
             <Box position='absolute' top="-500%" left="35px" zIndex={50} onBlur={() => setOpenPicker(false)} display={openPicker ? 'block' : 'none'}>
                 <EmojiPicker onEmojiClick={handleEmojiClick}/>
             </Box>
-            <input type="file" style={{display: 'none'}} ref={target => fileInputRef.current = target} />
+            <input type="file" style={{display: 'none'}} ref={target => fileInputRef.current = target} onChange={handleMedia}/>
             <div className='d-flex align-items-center justify-content-around' style={{maxWidth: '120px', marginRight: '10px'}}>
                 {
                     icons.map(({Icon, onClick}, index) => (

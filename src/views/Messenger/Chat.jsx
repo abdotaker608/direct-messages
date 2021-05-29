@@ -36,23 +36,42 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
         }
     }, [msgEvent])
 
+    //function to fire read message event
+    const fireRead = () => {
+        if (chat.id === activeChat?.id) {
+            const data = {type: 'read', payload: {uuid: UUID}};
+            socketRef.current.send(JSON.stringify(data));
+            setUnread(0);
+        }
+    }
+
     //connect to corresponding socket
     useEffect(() => {
         const socket = connectToChatSocket(chat.id);
         socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             onReceive(data);
-            if (data.type === 'message') {
+            if (data.type === 'message' && data.payload.sender.uuid !== UUID) {
                 if (!document.hasFocus()) {
                     //play notification when user is on another tab
                     notificationTone.current.play();
                 }
+                else fireRead();
             }
         }    
         socketRef.current = socket;
 
         return () => socket.close();
     }, [])
+
+    //message listener to window focus for firing read event
+    useEffect(() => {
+        window.addEventListener('focus', fireRead);
+        
+        return () => {
+            window.removeEventListener('focus', fireRead);
+        }
+    }, [fireRead])
 
     useEffect(() => {
         //when this changes it means that the user did input
@@ -64,11 +83,7 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
 
     //mark messages as read once it becomes the active chat
     useEffect(() => {
-        if (chat.id === activeChat?.id) {
-            const data = {type: 'read', payload: {uuid: UUID}};
-            socketRef.current.send(JSON.stringify(data));
-            setUnread(0);
-        }
+        fireRead();
     }, [activeChat])
 
     //function to get last message preview

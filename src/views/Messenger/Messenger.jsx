@@ -105,10 +105,9 @@ function Messenger() {
     }, [messages])
 
     useEffect(() => {
-        if (msgEvent?.type === 'read') {
+        if (msgEvent?.type === 'read' && msgEvent.payload.sender.uuid !== UUID) {
             const newMessages = [...messages];
             newMessages.forEach(message => message.seen = true);
-            setMsgEvent(null);
             setMessages(newMessages);
         }
 
@@ -122,7 +121,6 @@ function Messenger() {
                 return;
             }
             newMessages[idx] = msgEvent.payload;
-            setMsgEvent(null);
             setMessages(newMessages);
         }
     }, [msgEvent])

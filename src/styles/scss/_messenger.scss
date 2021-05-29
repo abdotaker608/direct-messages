@@ -88,18 +88,51 @@
         scroll-behavior: smooth;
 
         .message {
-            background: $silver;
-            border-radius: 15px;
-            padding: 10px;
-            margin: 5px 0;
-            max-width: 70%;
             width: fit-content;
+            max-width: 70%;
             font-size: 14px;
+            margin: 5px 0;
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+
+            .text {
+                background: $silver;
+                border-radius: 15px;
+                padding: 10px;
+                width: fit-content;
+
+                img {
+                    max-width: 100%;
+                    border-radius: 10px;
+                }
+            }
+
+            .seen-footer {
+                font-size: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding: 5px;
+                max-width: 100%;
+
+                span {
+                    color: gray;
+                    font-weight: bold;
+                }
+            }
             
             &.mine {
                 align-self: flex-end;
-                background: rgb(33, 137, 207);
-                color: white;
+
+                .text {
+                    background: rgb(33, 137, 207);
+                    color: white;
+    
+                    &.pending {
+                        background: lighten(rgb(33, 137, 207), 20%);
+                    }
+                }
             }
         }
     }

@@ -172,20 +172,49 @@ header.home-header form button {
   scroll-behavior: smooth;
 }
 .window .messages-window .message {
-  background: #f7f4f4;
-  border-radius: 15px;
-  padding: 10px;
-  margin: 5px 0;
-  max-width: 70%;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+  max-width: 70%;
   font-size: 14px;
+  margin: 5px 0;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+.window .messages-window .message .text {
+  background: #f7f4f4;
+  border-radius: 15px;
+  padding: 10px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.window .messages-window .message .text img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+.window .messages-window .message .seen-footer {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 5px;
+  max-width: 100%;
+}
+.window .messages-window .message .seen-footer span {
+  color: gray;
+  font-weight: bold;
 }
 .window .messages-window .message.mine {
   align-self: flex-end;
+}
+.window .messages-window .message.mine .text {
   background: #2189cf;
   color: white;
+}
+.window .messages-window .message.mine .text.pending {
+  background: #6eb7e8;
 }
 .window .compose {
   position: relative;

@@ -17,3 +17,19 @@ body {
 .form-group {
     margin: 15px 0;
 }
+
+//webkit defaults
+::-webkit-scrollbar {
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    $scrollBarCol: rgb(128, 126, 126);
+    background: $scrollBarCol;
+    border-radius: 30px;
+    &:hover {
+        background: darken($scrollBarCol, 10%);
+    }
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}

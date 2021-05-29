@@ -1,8 +1,7 @@
 import React, {createContext, useState} from 'react';
 import {v4} from 'uuid';
 import {connectToMainSocket as connectMain} from 'api/websocket';
-import {useHistory} from 'react-router-dom';
-import {MessengerRoute} from 'router/routes';
+import {useToast} from '@chakra-ui/react';
 
 
 export const UUIDContext = createContext();
@@ -10,30 +9,45 @@ export const UUIDContext = createContext();
 function UUIDProvider({children}) {
     
     //current uuid, automatically generated every time the app starts
-    const UUID = v4();
+    const [UUID] = useState(v4());
+
+    //connection status
+    const [connected, setConnected] = useState(false);
+
+    //toaster for user friendly messages
+    const toast = useToast();
 
     //event of other users creation and deletion
     const [event, setEvent] = useState({});
-
-    //router history object
-    const history = useHistory();
 
     //function to connect to the main websocket
     const connectToMainSocket = (name) => {
         //Connect using the name and UUID
         const socket = connectMain(UUID, name);
-        //Redirect to messenger on connect
-        socket.onopen = () => history.push(MessengerRoute);
+        socket.onopen = () => setConnected(true);
         //Listen to user creation and deletion real time events
         socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            setEvent(data);
+            //Check if the message is an error message and also for current user
+            if (data.type === 'exception' && data.payload.uuid === UUID) {
+                toast({
+                    title: 'Whoops!',
+                    description: data.payload.message,
+                    status: 'error',
+                    isClosable: true
+                })
+                setConnected(false);
+                //Close the socket so that user can retry with another name
+                socket.close();
+            }
+            else setEvent(data);
         }
     }
 
     const contextValue = {
         UUID,
         event,
+        connected,
         connectToMainSocket
     }
 

@@ -1,6 +1,8 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {UUIDContext} from 'providers/UUIDProvider';
+import {useHistory} from 'react-router-dom';
+import {MessengerRoute} from 'router/routes';
 
 function Home() {
 
@@ -8,7 +10,7 @@ function Home() {
     const [name, setName] = useState('');
 
     //function for connecting to main socket
-    const {connectToMainSocket} = useContext(UUIDContext);
+    const {connectToMainSocket, connected} = useContext(UUIDContext);
 
     //websocket connecting status
     const [connecting, setConnecting] = useState(false);
@@ -25,6 +27,15 @@ function Home() {
         setConnecting(true);
         connectToMainSocket(name);
     }
+
+    //history object
+
+    const history = useHistory();
+    useEffect(() => {
+        //If the user is already connected redirect to messenger
+        if (connected) history.push(MessengerRoute);
+    }, [connected])
+
 
     return (
         <div>

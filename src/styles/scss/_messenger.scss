@@ -1,0 +1,126 @@
+.messenger {
+
+    height: 100vh;
+    position: relative;
+}
+
+.messenger-layout {
+    height: 100%;
+    
+    @include media(992px) {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .chat {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: 200ms ease-out;
+        &:hover, &.active {
+            background: $silver;
+        }
+
+        h6 {
+            color: gray;
+            white-space: pre;
+            overflow: hidden;
+            max-width: 70%;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .chats-container {
+        height: 100%;
+        overflow-y: auto;
+        position: relative;
+        z-index: 2;
+        @include media(992px) {
+            width: 30%;
+            border-right: 1px solid darken($silver, 15%);
+        }
+    }
+}
+
+.window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+
+    @include media(992px) {
+        position: relative;
+        width: 70%;
+    }
+
+    .chat-window {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .top-nav {
+        padding: 15px;
+        border-bottom: 1px solid darken($silver, 10%);
+        display: flex;
+        justify-content: space-between;
+
+        h2 {
+            white-space: pre;
+            overflow: hidden;
+            max-width: 100%;
+            text-overflow: ellipsis;
+        }
+
+        >div {
+            flex-grow: 1;
+            max-width: 50%;
+        }
+    }
+
+    .messages-window {
+        flex-grow: 1;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+
+        .message {
+            background: $silver;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 5px 0;
+            max-width: 70%;
+            width: fit-content;
+            font-size: 14px;
+            
+            &.mine {
+                align-self: flex-end;
+                background: rgb(33, 137, 207);
+                color: white;
+            }
+        }
+    }
+
+    .compose {
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 5px;
+
+        form {
+            flex-grow: 1;
+
+            button {
+                margin: 0 10px 0 15px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+        }
+    }
+}

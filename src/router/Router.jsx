@@ -4,13 +4,15 @@ import Routes from './routes';
 
 function Router({location}) {
     return (
-        <TransitionGroup>
-            <CSSTransition key={location.key} classNames='fade' timeout={300}>
+        <TransitionGroup className='scale-container'>
+            <CSSTransition key={location.key} classNames='scale' timeout={300}>
                 <Switch location={location}>
                     {
                         Routes.map(({path, Component}) => (
                             <Route path={path} exact key={path}>
-                                <Component />
+                                <div className='scale'>
+                                    <Component />
+                                </div>
                             </Route>
                         ))
                     }

@@ -101,7 +101,7 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
         <div className={`chat ${chat.id === activeChat?.id ? 'active' : ''}`} onClick={onClick}>
             <div className='d-flex align-items-center'>
                 <Avatar width="60px" height="60px"/>
-                <Box margin="0 10px" flexGrow={1}>
+                <Box margin="0 10px" flexGrow={1} maxW={{base: "60%", sm: "80%", lg: "55%", xl: "65%"}}>
                     <Heading fontSize={18} fontWeight="500">{chatUser.username}</Heading>
                     <h6 className='mt-1'>
                         <Emoji text={getLastMessage(lastMessage)} />

@@ -128,9 +128,11 @@ header.home-header form button {
 }
 .messenger-layout .chat h6 {
   color: gray;
+}
+.messenger-layout .chat h2, .messenger-layout .chat h6 {
   white-space: pre;
   overflow: hidden;
-  max-width: 70%;
+  max-width: 80%;
   text-overflow: ellipsis;
 }
 .messenger-layout .chats-container {

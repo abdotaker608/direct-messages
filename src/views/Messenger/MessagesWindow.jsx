@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import Emoji from 'react-emoji-render';
 import {FaCheckDouble} from 'react-icons/fa';
 import {toObjectUrl} from 'utils/tools';
+import {CircularProgress, Box} from '@chakra-ui/react';
 
 function MessagesWindow({messages, uuid, fetchMessages, chat}) {
 
@@ -69,12 +70,32 @@ function MessagesWindow({messages, uuid, fetchMessages, chat}) {
                             </div>
                             :
                             <>
-                            {message.attachment && <img src={toObjectUrl(message.attachment, 'image/*')} alt="" />}
-                            {message.audio&& <audio src={toObjectUrl(message.audio, 'audio/webm')} controls />}
+                            {
+                                message.attachment &&
+                                (
+                                    message.pending ?
+                                    <Box d="flex" alignItems="center" justifyContent="center" minHeight="100px">
+                                        <CircularProgress trackColor="transparent" size={8} isIndeterminate/>
+                                    </Box>
+                                    :
+                                    <img src={toObjectUrl(message.attachment, 'image/*')} alt="" />
+                                )
+                            }
+                            {
+                                message.audio &&
+                                (
+                                    message.pending ?
+                                    <Box d="flex" alignItems="center" justifyContent="center" minHeight="100px">
+                                        <CircularProgress trackColor="transparent" size={8} isIndeterminate/>
+                                    </Box>
+                                    :
+                                    <audio src={toObjectUrl(message.audio, 'audio/webm')} controls />
+                                )
+                            }
                             </>
                         }
                         {
-                            (message.sender.uuid === uuid && idx === arr.length - 1) &&
+                            (!message.pending && message.sender.uuid === uuid && idx === arr.length - 1) &&
                             <div className='seen-footer'>
                                 <span className='mx-1'>
                                     {getMsgDate(message.created)}

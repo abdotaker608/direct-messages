@@ -29,6 +29,9 @@ function Compose({onSend, uuid}) {
     //media recorder
     const mediaRecorder = useRef(null);
 
+    //indicates if the record shall be discarded
+    const discardRecordFlag = useRef(false);
+
     //chunks recorded
     const [chunks, setChunks] = useState([]);
 
@@ -53,6 +56,7 @@ function Compose({onSend, uuid}) {
 
     //function to start recording
     const startRecord = () => {
+        discardRecordFlag.current = false;
         setIsRecording(true);
         navigator.mediaDevices.getUserMedia({
             audio: true
@@ -81,10 +85,16 @@ function Compose({onSend, uuid}) {
         setIsRecording(false);
         recordStream.current.getTracks().forEach(track => track.stop());
     }
+
+    //function to discard record
+    const discardRecord = () => {
+        discardRecordFlag.current = true;
+        stopRecord();
+    }
     
     useEffect(() => {
         //sending chunks in chat when ready
-        if (chunks.length) {
+        if (chunks.length && !discardRecordFlag.current) {
             const blob = new Blob(chunks, {type: 'audio/webm'});
             readAsB64(blob, (result) => {
                 onSend({sender: {uuid}, audio: result, hash: v4()});
@@ -118,7 +128,7 @@ function Compose({onSend, uuid}) {
 
     //functioning icons
     const icons = [
-        {Icon: BiMicrophone, onMouseDown: startRecord, onMouseUp: stopRecord, onMouseLeave: stopRecord},
+        {Icon: BiMicrophone, onMouseDown: startRecord, onMouseUp: stopRecord, onMouseLeave: discardRecord},
         {Icon: BiUnlink, onClick: () => fileInputRef.current.click()},
         {Icon: BiWinkTongue, onClick: () => setOpenPicker(!openPicker)}
     ]

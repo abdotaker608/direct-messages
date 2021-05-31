@@ -1,5 +1,5 @@
-export const baseUrl = 'http://127.0.0.1:8000';
-export const socketUrl = 'ws://127.0.0.1:8000/websocket';
+export const baseUrl = 'https://direct-messages-api.herokuapp.com';
+export const socketUrl = 'wss://direct-messages-api.herokuapp.com/websocket';
 
 export const get = async (endpoint, params) => {
     //Query search paramters string

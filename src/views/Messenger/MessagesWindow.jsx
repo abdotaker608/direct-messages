@@ -62,10 +62,17 @@ function MessagesWindow({messages, uuid, fetchMessages, chat}) {
                         `}
                         key={message.hash}
                     >
-                        <div className='text'>
-                            {message.text && <Emoji text={message.text} />}
+                        {
+                            message.text ?
+                            <div className='text'>
+                                <Emoji text={message.text} />
+                            </div>
+                            :
+                            <>
                             {message.attachment && <img src={toObjectUrl(message.attachment, 'image/*')} alt="" />}
-                        </div>
+                            {message.audio&& <audio src={toObjectUrl(message.audio, 'audio/webm')} controls />}
+                            </>
+                        }
                         {
                             (message.sender.uuid === uuid && idx === arr.length - 1) &&
                             <div className='seen-footer'>

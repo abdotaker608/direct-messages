@@ -11,6 +11,9 @@ function UUIDProvider({children}) {
     //current uuid, automatically generated every time the app starts
     const [UUID] = useState(v4());
 
+    //username inserted
+    const [username, setUsername] = useState('');
+
     //connection status
     const [connected, setConnected] = useState(false);
 
@@ -22,6 +25,7 @@ function UUIDProvider({children}) {
 
     //function to connect to the main websocket
     const connectToMainSocket = (name) => {
+        setUsername(name);
         //Connect using the name and UUID
         const socket = connectMain(UUID, name);
         socket.onopen = () => setConnected(true);
@@ -48,6 +52,7 @@ function UUIDProvider({children}) {
         UUID,
         event,
         connected,
+        username,
         connectToMainSocket
     }
 

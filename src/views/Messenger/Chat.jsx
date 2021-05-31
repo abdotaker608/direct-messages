@@ -47,8 +47,8 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
 
     //connect to corresponding socket
     useEffect(() => {
-        const socket = connectToChatSocket(chat.id);
-        socket.onmessage = (e) => {
+        socketRef.current = connectToChatSocket(chat.id);
+        socketRef.current.onmessage = (e) => {
             const data = JSON.parse(e.data);
             onReceive(data);
             if (data.type === 'message' && data.payload.sender.uuid !== UUID) {
@@ -59,9 +59,8 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
                 else fireRead();
             }
         }    
-        socketRef.current = socket;
 
-        return () => socket.close();
+        return () => socketRef.current.close();
     }, [])
 
     //message listener to window focus for firing read event
@@ -76,8 +75,9 @@ function Chat({chat, activeChat, onClick, onReceive, tempMessage, msgEvent}) {
     useEffect(() => {
         //when this changes it means that the user did input
         //a message and submitted it to send in the chat
-        if (!tempMessage || chat.id !== activeChat?.id) return;
-        const data = {type: 'message', payload: tempMessage};
+        //RTC events shall fire without depending on what chat is active
+        if ((!tempMessage.message || chat.id !== activeChat?.id) && tempMessage.type !== 'rtc') return;
+        const data = {type: tempMessage.type, payload: tempMessage.message};
         socketRef.current.send(JSON.stringify(data));
     }, [tempMessage])
 

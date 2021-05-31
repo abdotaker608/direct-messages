@@ -33,3 +33,23 @@
     transform: scale(.9);
     transition: 300ms ease-out;
 }
+
+//fade transitions
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: 300ms ease-out;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: 300ms ease-out;
+}

@@ -5,13 +5,13 @@ import RTC from './RTC';
 import Compose from './Compose';
 import MessagesWindow from './MessagesWindow';
 
-function ChatWindow({chat, messages, closeCurrent, onSend, fetchMessages}) {
+function ChatWindow({chat, messages, closeCurrent, onSend, fetchMessages, msgEvent, isCall, changeActiveChat}) {
 
     //UUID
     const {UUID} = useContext(UUIDContext);
 
     //connected user on chat
-    const chatUser = chat?.users?.find(user => user.uuid !== UUID);
+    const chatUser = chat?.users.find(user => user.uuid !== UUID);
 
     return (
         <div className='chat-window'>
@@ -20,10 +20,10 @@ function ChatWindow({chat, messages, closeCurrent, onSend, fetchMessages}) {
                     <Avatar width="50px" height="50px"/>
                     <Heading margin="0 10px" fontSize={16} fontWeight="500">{chatUser?.username}</Heading>
                 </div>
-                <RTC closeChatWindow={closeCurrent}/>
+                <RTC closeChatWindow={closeCurrent} msgEvent={msgEvent} onSend={onSend} isCall={isCall} chat={chat} changeActiveChat={changeActiveChat} receiver={chatUser}/>
             </div>
             <MessagesWindow messages={messages} uuid={UUID} fetchMessages={fetchMessages} chat={chat}/>
-            <Compose onSend={onSend} uuid={UUID}/>
+            <Compose onSend={onSend} uuid={UUID} />
         </div>
     )
 }

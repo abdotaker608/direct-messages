@@ -15,6 +15,14 @@ function Messenger() {
     //current active chat
     const [currentChat, setCurrentChat] = useState(null);
 
+    //function to change active chat using id
+    const changeActiveChat = (id) => {
+        setCurrentChat(chats.find(c => c.id === id));
+    }
+
+    //indicate if there is a call running
+    const [isCall, setIsCall] = useState(false);
+
     //connected status and uuid for user
     const {connected, UUID, event} = useContext(UUIDContext);
 
@@ -25,7 +33,7 @@ function Messenger() {
     const [messages, setMessages] = useState([]);
 
     //temp message to send in socket
-    const [tempMessage, setTempMessage] = useState(null);
+    const [tempMessage, setTempMessage] = useState({});
 
     //new received message
     const [msgEvent, setMsgEvent] = useState(null);
@@ -69,17 +77,22 @@ function Messenger() {
 
     useEffect(() => {
         //listen to new connecting/disconnecting users
-        if (event.type === 'create' || event.type === 'delete') fetchChats();
+        if (event.type === 'create' || event.type === 'delete') {
+            fetchChats();
+            setMsgEvent(event);
+        }
     }, [event])
 
     //callback for receiving messages
     const onReceive = (event) => setMsgEvent(event);
 
     //call back for sending messages
-    const onSend = (message) => {
-        setTempMessage(message);
-        const pendingMessage = {...message, pending: true};
-        setMessages([...messages, pendingMessage]);
+    const onSend = (message, type = 'message') => {
+        setTempMessage({message, type});
+        if (type === 'message') {
+            const pendingMessage = {...message, pending: true};
+            setMessages([...messages, pendingMessage]);
+        }
     }
 
     useEffect(() => {
@@ -142,8 +155,8 @@ function Messenger() {
                         ))
                     }
                 </div>
-                <div className='window' style={{zIndex: currentChat ? 50 : 1, display: currentChat ? 'block' : 'none'}}>
-                    <ChatWindow messages={messages} chat={currentChat} closeCurrent={() => setCurrentChat(null)} onSend={onSend} fetchMessages={() => setFetchOld(true)}/>
+                <div className='window' style={{zIndex: currentChat || isCall ? 50 : 1, display: currentChat || isCall ? 'block' : 'none'}}>
+                    <ChatWindow messages={messages} chat={currentChat} closeCurrent={() => setCurrentChat(null)} onSend={onSend} fetchMessages={() => setFetchOld(true)} msgEvent={msgEvent} isCall={setIsCall} changeActiveChat={changeActiveChat}/>
                 </div>
             </div>
         </div>

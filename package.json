@@ -6,9 +6,11 @@
     "@chakra-ui/react": "^1.6.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@foobar404/wave": "^1.2.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "adapterjs": "^0.15.5",
     "bootstrap": "^5.0.1",
     "emoji-picker-react": "^3.4.6",
     "framer-motion": "^4",
@@ -24,6 +26,7 @@
     "react-transition-group": "^4.4.1",
     "reconnecting-websocket": "^4.4.0",
     "uuid": "^8.3.2",
+    "wave-visualizer": "^1.0.6",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
